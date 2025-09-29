@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Happy Teacher's Day 🎉</title>
+  <style>
+    :root{
+      --bg:#0f1724;
+      --card:#0b1220;
+      --accent:#ffdd57;
+      --accent-2:#ff6b6b;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;color:#e6eef8}
+    body{
+      background: radial-gradient(circle at 10% 10%, rgba(255,255,255,0.03), transparent 10%),
+                  linear-gradient(180deg,#071124 0%, #081426 50%, #071026 100%);
+      display:flex;align-items:center;justify-content:center;padding:24px;
+    }
+
+    .stage{
+      width:920px;max-width:100%;min-height:520px;background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+      border-radius:16px;padding:28px;position:relative;overflow:hidden;box-shadow:0 10px 30px rgba(3,10,18,0.7);
+    }
+
+    header{display:flex;align-items:center;gap:16px}
+    h1{margin:0;font-size:28px;letter-spacing:0.6px}
+    p.lead{margin:6px 0 0;color:#bcd1ea}
+
+    /* Balloons container (floating balloons behind the card) */
+    .balloon-layer{position:absolute;inset:0;pointer-events:none}
+    .balloon{position:absolute;bottom:-140px;width:84px;height:112px;border-radius:60% 60% 55% 55%;display:flex;align-items:flex-end;justify-content:center}
+    .balloon:after{content:"";position:absolute;bottom:-28px;width:2px;height:28px;background:linear-gradient(#333,#111);border-radius:2px;}
+
+    /* balloon colors */
+    .b1{background:linear-gradient(180deg,#ff7bb0,#ff5a93);left:12%;animation:float 8s ease-in-out infinite;transform-origin:50% 100%}
+    .b2{background:linear-gradient(180deg,#ffd36b,#ffbe35);left:30%;animation:float 7.5s 0.6s ease-in-out infinite}
+    .b3{background:linear-gradient(180deg,#6be8ff,#3ec4ff);left:50%;animation:float 9s 0.3s ease-in-out infinite}
+    .b4{background:linear-gradient(180deg,#b39bff,#905bff);left:72%;animation:float 8.8s 0.2s ease-in-out infinite}
+    .b5{background:linear-gradient(180deg,#8affc1,#2be08f);left:86%;animation:float 9.2s 0.8s ease-in-out infinite}
+
+    @keyframes float{
+      0%{transform:translateY(0) rotate(-3deg)}
+      50%{transform:translateY(-36vh) rotate(3deg)}
+      100%{transform:translateY(0) rotate(-3deg)}
+    }
+
+    /* Controls */
+    .controls{position:absolute;right:20px;top:20px}
+    button{background:var(--accent);border:none;padding:10px 14px;border-radius:10px;font-weight:600;cursor:pointer}
+
+    /* Cake popup modal */
+    .modal-backdrop{position:absolute;inset:0;background:rgba(2,6,23,0.6);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s ease}
+    .modal-backdrop.show{opacity:1;pointer-events:auto}
+    .modal{background:linear-gradient(180deg,#0b1420,#081020);padding:26px;border-radius:14px;min-width:320px;max-width:780px;box-shadow:0 18px 50px rgba(2,8,20,0.8);transform:scale(0.8);opacity:0;transition:all .28s cubic-bezier(.2,.9,.2,1)}
+    .modal.show{transform:scale(1);opacity:1}
+    .modal .modal-body{display:flex;gap:18px;align-items:center}
+
+    /* Cake illustration (pure css + svg) */
+    .cake-wrap{width:220px;height:180px;display:flex;align-items:flex-end;justify-content:center;position:relative}
+    .cake-base{width:200px;height:84px;background:linear-gradient(180deg,#ffb3a7,#ff7b68);border-radius:12px;border-bottom-left-radius:28px;border-bottom-right-radius:28px;position:relative;box-shadow:inset 0 -8px 12px rgba(0,0,0,0.18)}
+    .cake-frost{position:absolute;top:-34px;left:50%;transform:translateX(-50%);width:180px;height:56px;background:linear-gradient(180deg,#fff,#ffe9d9);border-radius:40px}
+    .candles{position:absolute;top:-64px;left:50%;transform:translateX(-50%);display:flex;gap:10px}
+    .candle{width:8px;height:30px;background:#ffffff;border-radius:3px;position:relative}
+    .flame{position:absolute;top:-12px;left:50%;transform:translateX(-50%);width:12px;height:20px;border-radius:50% 50% 50% 50%;background:linear-gradient(180deg,#ffd27a,#ff9b3a);filter:drop-shadow(0 4px 6px rgba(255,150,30,0.25));animation:flicker 900ms infinite}
+    @keyframes flicker{
+      0%{transform:translateX(-50%) scale(1) translateY(0)}
+      50%{transform:translateX(-50%) scale(0.92) translateY(1px)}
+      100%{transform:translateX(-50%) scale(1) translateY(0)}
+    }
+
+    .message{flex:1}
+    .message h2{margin:0 0 6px;font-size:22px}
+    .message p{margin:0;color:#cbdff9}
+
+    .close{margin-top:16px;display:flex;gap:8px;justify-content:flex-end}
+    .btn{background:transparent;border:1px solid rgba(255,255,255,0.06);padding:8px 12px;border-radius:8px;color:inherit;cursor:pointer}
+    .btn.primary{background:var(--accent);border:none;color:#091022}
+
+    /* confetti pieces */
+    .confetti-piece{position:absolute;width:10px;height:18px;opacity:0;pointer-events:none}
+
+    /* footer note */
+    footer{position:absolute;left:24px;bottom:18px;color:#9fb6df;font-size:13px}
+
+    /* small responsive tweaks */
+    @media (max-width:640px){.modal .modal-body{flex-direction:column-reverse;text-align:center}.cake-wrap{width:160px;height:140px}}
+  </style>
+</head>
+<body>
+  <div class="stage" role="main" aria-labelledby="title">
+    <div class="balloon-layer" aria-hidden="true">
+      <div class="balloon b1" style="transform: translateY(30px) rotate(-6deg);"></div>
+      <div class="balloon b2" style="transform: translateY(10px) rotate(4deg);width:70px;height:94px"></div>
+      <div class="balloon b3" style="transform: translateY(0px) rotate(-2deg);width:96px;height:122px"></div>
+      <div class="balloon b4" style="transform: translateY(20px) rotate(6deg);width:76px;height:98px"></div>
+      <div class="balloon b5" style="transform: translateY(6px) rotate(-3deg);width:64px;height:86px"></div>
+    </div>
+
+    <header>
+      <div style="flex:1">
+        <h1 id="title">Happy Teacher's Day, Sir Cyrus</h1>
+        <p class="lead">Thank you for guiding, inspiring, and shaping the future. Click Celebrate to make a wish!</p>
+      </div>
+      <div class="controls">
+        <button id="celebrateBtn" aria-haspopup="dialog">Celebrate 🎉</button>
+      </div>
+    </header>
+
+    <main style="margin-top:24px">
+      <p style="max-width:60ch;line-height:1.5;color:#cfe3ff">Teachers plant the seeds of knowledge and water them with patience. Today we celebrate every lesson, every encouragement, and every moment you believed in us. Press the Celebrate button to pop up a cake and release balloons and confetti.</p>
+    </main>
+
+    <footer>Made with ❤️ — Happy Teacher's Day, Sir Cyrus!</footer>
+
+    <!-- Modal popup -->
+    <div id="modalBackdrop" class="modal-backdrop" role="dialog" aria-modal="true" aria-hidden="true">
+      <div id="modal" class="modal" role="document" aria-labelledby="modalTitle">
+        <div class="modal-body">
+          <div class="cake-wrap" aria-hidden="true">
+            <div class="cake-frost"></div>
+            <div class="cake-base"></div>
+            <div class="candles" aria-hidden="true">
+              <div class="candle"><div class="flame"></div></div>
+              <div class="candle"><div class="flame"></div></div>
+              <div class="candle"><div class="flame"></div></div>
+            </div>
+          </div>
+
+          <div class="message">
+            <h2 id="modalTitle">Happy Teacher's Day, Sir Cyrus!</h2>
+            <p>We appreciate your patience and dedication. Make a wish and blow the candles!</p>
+            <div class="close">
+              <button class="btn" id="closeBtn">Close</button>
+              <button class="btn primary" id="blowBtn">Blow Candles</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const celebrateBtn = document.getElementById('celebrateBtn');
+    const modalBackdrop = document.getElementById('modalBackdrop');
+    const modal = document.getElementById('modal');
+    const closeBtn = document.getElementById('closeBtn');
+    const blowBtn = document.getElementById('blowBtn');
+    let confettiTimeouts = [];
+
+    function showModal(){
+      modalBackdrop.classList.add('show');
+      modal.classList.add('show');
+      modalBackdrop.setAttribute('aria-hidden','false');
+      // make balloons lively (add small random shifts)
+      subtleShakeBalloons();
+    }
+    function hideModal(){
+      modalBackdrop.classList.remove('show');
+      modal.classList.remove('show');
+      modalBackdrop.setAttribute('aria-hidden','true');
+    }
+
+    celebrateBtn.addEventListener('click', ()=>{
+      showModal();
+      // release a small burst of confetti right away
+      launchConfetti(36);
+    });
+    closeBtn.addEventListener('click', hideModal);
+
+    // Blow candles -> extinguish flame and bigger confetti + balloons rise
+    blowBtn.addEventListener('click', ()=>{
+      extinguishFlames();
+      launchConfetti(80);
+      releaseExtraBalloons();
+    });
+
+    // extinguish flames (fade out)
+    function extinguishFlames(){
+      document.querySelectorAll('.flame').forEach(f=>{
+        f.style.transition='opacity .6s ease, transform .6s ease';
+        f.style.opacity=0;
+        f.style.transform='translateX(-50%) scale(0.6) translateY(4px)';
+      });
+    }
+
+    // create confetti pieces
+    function launchConfetti(amount=50){
+      const stage = document.querySelector('.stage');
+      for(let i=0;i<amount;i++){
+        const el = document.createElement('div');
+        el.className='confetti-piece';
+        el.style.left = (20 + Math.random()*60) + '%';
+        el.style.top = (30 + Math.random()*40) + '%';
+        el.style.background = randomColor();
+        el.style.transform = `translateY(0) rotate(${Math.random()*360}deg)`;
+        stage.appendChild(el);
+
+        // animate
+        const fall = el.animate([
+          {opacity:0, transform: `translateY(-10px) rotate(${Math.random()*360}deg)`},
+          {opacity:1, transform: `translateY(${120 + Math.random()*260}px) rotate(${Math.random()*720}deg)`}
+        ],{duration: 1400 + Math.random()*1600, easing:'cubic-bezier(.2,.7,.2,1)'});
+
+        const t = setTimeout(()=>{ el.remove(); }, 3000 + Math.random()*3000);
+        confettiTimeouts.push(t);
+      }
+    }
+    function randomColor(){
+      const palette = ['#ff6b6b','#ffd93d','#6be8ff','#b39bff','#8affc1','#ff9eb1'];
+      return palette[Math.floor(Math.random()*palette.length)];
+    }
+
+    // Add extra balloons that float upward across the stage
+    function releaseExtraBalloons(){
+      const layer = document.querySelector('.balloon-layer');
+      for(let i=0;i<6;i++){
+        const b = document.createElement('div');
+        b.className='balloon';
+        b.style.left = (5 + Math.random()*90) + '%';
+        b.style.width = (60 + Math.random()*64) + 'px';
+        b.style.height = (76 + Math.random()*60) + 'px';
+        b.style.background = randomGradient();
+        b.style.bottom='-160px';
+        layer.appendChild(b);
+        const dur = 6000 + Math.random()*5000;
+        b.animate([
+          {transform:`translateY(0) rotate(${(-6+Math.random()*12).toFixed(1)}deg)`, opacity:0},
+          {transform:`translateY(-48vh) rotate(${(-6+Math.random()*12).toFixed(1)}deg)`, opacity:1},
+          {transform:`translateY(-92vh) rotate(${(-6+Math.random()*12).toFixed(1)}deg)`, opacity:0}
+        ], {duration: dur, easing:'ease-in', iterations:1});
+        setTimeout(()=>b.remove(), dur+300);
+      }
+    }
+    function randomGradient(){
+      const g = [
+        ['#ff7bb0','#ff5a93'],['#ffd36b','#ffbe35'],['#6be8ff','#3ec4ff'],['#b39bff','#905bff'],['#8affc1','#2be08f']
+      ];
+      const c = g[Math.floor(Math.random()*g.length)];
+      return `linear-gradient(180deg, ${c[0]}, ${c[1]})`;
+    }
+
+    // tiny motion to existing balloons to make them feel alive when modal opens
+    function subtleShakeBalloons(){
+      document.querySelectorAll('.balloon').forEach((b, i)=>{
+        b.animate([
+          {transform: 'translateY(0) rotate(-3deg)'},
+          {transform: 'translateY(-18vh) rotate(3deg)'},
+          {transform: 'translateY(0) rotate(-3deg)'}
+        ],{duration: 2600 + i*260, iterations:1, easing:'ease-in-out'});
+      });
+    }
+
+    // auto-open modal once after page load (friendly surprise)
+    window.addEventListener('load', ()=>{
+      setTimeout(()=>{
+        showModal();
+        launchConfetti(28);
+      }, 1200);
+    });
+
+    // accessibility: close modal with Escape
+    window.addEventListener('keydown', (e)=>{
+      if(e.key === 'Escape') hideModal();
+    });
+
+  </script>
+</body>
+</html>
